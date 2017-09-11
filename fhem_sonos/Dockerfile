@@ -123,7 +123,7 @@ libsoap-lite-perl \
 libxml-parser-lite-perl
 
 # Install für SONOS
-#RUN cpan SOAP::Lite
+RUN cpan SOAP::Lite
 
 # Install fhem
 RUN wget https://fhem.de/fhem-${FHEM_VERSION}.deb && dpkg -i fhem-${FHEM_VERSION}.deb

@@ -8,7 +8,7 @@
 # Ubuntu --> ubuntu:latest
 FROM debian:jessie
 
-MAINTAINER Stefan Erdmann <ich@welt.com>
+MAINTAINER Tyllux
 
 ############################################################################
 # Info
@@ -36,7 +36,7 @@ ENV FHEM_VER 5.8
 # docker-compose (yml)   Docker volume in container mounten
 
 # FTP Camera & FHEM
-VOLUME /var/www/ftp/camera/ /var/www/ftp/fhem/
+#VOLUME /var/www/ftp/camera/ /var/www/ftp/fhem/
 
 ############################################################################
 # Portfreigabe
@@ -96,20 +96,24 @@ RUN sed -i "s/$/ contrib non-free/g" etc/apt/sources.list
 
 # Neue Quellen updaten & Install dependencies
 RUN $_update && $_install \
-perl \
-etherwake \
-dfu-programmer \
+apt-transport-https \
 build-essential \
-snmpd \
-snmp \
-snmp-mibs-downloader \
-telnet \
+dfu-programmer \
+git \
+nano \
+perl \
+python \
 sqlite3 \
 samba \
+samba cifs-utils \
 samba-common-bin \
-lirc \
-avrdude
-# geoip-bin
+snmp \
+snmpd \
+sudo etherwake \
+sqlite3 \
+telnet \
+usbutils \
+wget
 
 # Install perl packages
 RUN $_install \
@@ -119,6 +123,7 @@ libclass-dbi-mysql-perl \
 libclass-isa-perl \
 libcommon-sense-perl \
 libdatetime-format-strptime-perl \
+libdbd-sqlite3-perl \
 libdbi-perl \
 libdevice-serialport-perl \
 libdpkg-perl \
@@ -130,27 +135,24 @@ libio-socket-ssl-perl \
 libjson-perl \
 libjson-xs-perl \
 libmail-sendmail-perl \
+libnet-telnet-perl \
+libsoap-lite-perl \
 libsocket-perl \
 libswitch-perl \
 libsys-hostname-long-perl \
 libterm-readkey-perl \
 libterm-readline-perl-perl \
-libwww-perl \
-libxml-simple-perl \
-libdbd-sqlite3-perl \
 libtext-diff-perl \
-libsoap-lite-perl \
+libwww-perl \
 libxml-parser-lite-perl \
-libconvert-base32-perl \
-libauthen-oath-perl \
-libcrypt-urandom-perl
+libxml-simple-perl
 
 # Install snmp mibs (NAS Status)
-RUN cpan install use Net::SNMP && \
+#RUN cpan install use Net::SNMP && \
 # Install Infrarot Client
-    cpan Lirc::Client && \
+#    cpan Lirc::Client && \
 # FHEM installieren
-    wget https://fhem.de/fhem-${FHEM_VER}.deb && dpkg -i fhem-${FHEM_VER}.deb && \
+RUN wget https://fhem.de/fhem-${FHEM_VER}.deb && dpkg -i fhem-${FHEM_VER}.deb && \
 # FHEM-User löschen
     userdel fhem && \
 # FTP-Ordner Eigentümer Gruppen für ftpuser zuordnen (gid=9999)
@@ -163,7 +165,7 @@ WORKDIR "/opt/fhem"
 
 # Icon Set herunterladen (leider helle Icons)
 # RUN git clone https://github.com/OpenAutomationProject/knx-uf-iconset/ /opt/fhem/www/images/iconset/
-
+RUN cd /opt/fhem/www/ && git clone https://github.com/klein0r/fhem-style-haus-automatisierung.git hausautomatisierung-com && chown -R fhem:dialout /opt/fhem/www/hausautomatisierung-com
 # Update Config kopieren
 COPY /data/fhem.cfg.update ./fhem.cfg
 
@@ -178,7 +180,7 @@ RUN echo "http://fhem.de/fhemupdate/controls_fhem.txt" >> ./FHEM/controls.txt &&
 # SSL-Zertifikate erstellen
     mkdir /opt/fhem/certs && \
     cd /opt/fhem/certs/ && \
-    openssl req -new -x509 -nodes -out server-cert.pem -days 3650 -keyout server-key.pem -subj /C=DE/ST=NRW/L=Juelich/O=FHEM/OU=SmartHome/CN=SErdmann/challengePassword=ZQu6zqcH5gGnFjgX && \
+    openssl req -new -x509 -nodes -out server-cert.pem -days 3650 -keyout server-key.pem -subj /C=DE/ST=NRW/L=Bochum/O=FHEM/OU=SmartHome/CN=Tyllux/challengePassword=ZQu5zqcH4gGnFjgX && \
 # Rechte der SSL-Zertifikate anpassen
     chmod -R 644 /opt/fhem/certs && \
     chmod 711 /opt/fhem/certs && \
@@ -188,27 +190,27 @@ RUN echo "http://fhem.de/fhemupdate/controls_fhem.txt" >> ./FHEM/controls.txt &&
 COPY /data/fhem.cfg ./fhem.cfg
 
 # Telegram Token hinzufügen
-RUN sed -i "/define TelegramBot TelegramBot/ s/$/ 412221859:AAFEdqcceGMmEfSeWUsbDN2GLtEYbRuF6qw/" /opt/fhem/fhem.cfg
+#RUN sed -i "/define TelegramBot TelegramBot/ s/$/ 412221859:AAFEdqcceGMmEfSeWUsbDN2GLtEYbRuF6qw/" /opt/fhem/fhem.cfg
 
 # Wetterverlauf gplot kopieren
-COPY data/www/gplot/SVG_Wetterverlauf.gplot ./www/gplot/SVG_Wetterverlauf.gplot
+#COPY data/www/gplot/SVG_Wetterverlauf.gplot ./www/gplot/SVG_Wetterverlauf.gplot
 
 # Fernbedienungsspeziefischer Infrarot-Code kopieren
-COPY data/lirc/lircd.conf /etc/lirc/lircd.conf
+#COPY data/lirc/lircd.conf /etc/lirc/lircd.conf
 
 # Hardware Konfiguration kopieren
-COPY data/lirc/hardware.conf /etc/lirc/hardware.conf
+#COPY data/lirc/hardware.conf /etc/lirc/hardware.conf
 
 # Infrarot-Code Konfiguration für FHEM kopieren
-COPY data/lirc/lircrc /opt/fhem/lircrc
+#COPY data/lirc/lircrc /opt/fhem/lircrc
 
 # Abfallkalender kopieren
-COPY data/kal_abfall.ics ./kal_abfall.ics
+#COPY data/kal_abfall.ics ./kal_abfall.ics
 
 # Feiertage NRW & Urlaub kopieren
-COPY data/FHEM/hol_nrw.holiday ./FHEM/hol_nrw.holiday
-COPY data/FHEM/hol_stefan.holiday ./FHEM/hol_stefan.holiday
-COPY data/FHEM/hol_maren.holiday ./FHEM/hol_maren.holiday
+#COPY data/FHEM/hol_nrw.holiday ./FHEM/hol_nrw.holiday
+#COPY data/FHEM/hol_stefan.holiday ./FHEM/hol_stefan.holiday
+#COPY data/FHEM/hol_maren.holiday ./FHEM/hol_maren.holiday
 
 ############################################################################
 # CleanUp

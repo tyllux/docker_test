@@ -1,4 +1,4 @@
-version: '3'
+version: '2'
 
 ############################################################################
 # INFO:
@@ -130,34 +130,34 @@ version: '3'
 ############################################################################
 ############################################################################
 
-volumes:
+#volumes:
 
 ############################################################################
 # Volumes: TVheadend
 ############################################################################
 
-    tvh.config:
-        driver: local
+#    tvh.config:
+#        driver: local
 
-    tvh.recordings:
-        driver: local
+#    tvh.recordings:
+#        driver: local
 
 ############################################################################
 # Volumes: SSL Zertifikate
 ############################################################################
 
-    ssl.cert:
-        driver: local
+#    ssl.cert:
+#        driver: local
 
 ############################################################################
 # Volumes: FTP Daten
 ############################################################################
 
-    ftp.camera:
-        driver: local
+#    ftp.camera:
+#        driver: local
 
-    ftp.fhem:
-        driver: local
+#    ftp.fhem:
+#        driver: local
 
 ############################################################################
 ############################################################################
@@ -171,26 +171,26 @@ services:
 # Service: Apache2
 ############################################################################
 
-    apache2:
-        container_name: apache2
-        restart: always
-        expose:
-            - "443"
-            - "80"
-        ports:
-            - "443:443"
-            - "80:80"
-        build: apache2
-        volumes:
-            - ./apache2/entrypoint.sh:/entrypoint.sh
-            - ./apache2/data/html/:/var/www/html/
-            - ./apache2/data/logs/apache2/:/var/log/apache2/
-            - ./apache2/data/logs/fail2ban/fail2ban.log:/var/log/fail2ban.log
-            - ./apache2/data/config/proxy/<website>.conf:/etc/apache2/sites-available/<website>.conf
-            - ./apache2/data/config/fail2ban/apache2.local:/etc/fail2ban/jail.d/apache2.local
-            - ./apache2/data/config/fail2ban/action.d/docker-ban.conf:/etc/fail2ban/action.d/docker-ban.conf
-            - ssl.cert:/etc/letsencrypt
-        network_mode: "bridge"
+#    apache2:
+#        container_name: apache2
+#        restart: always
+#        expose:
+#            - "443"
+#            - "80"
+#        ports:
+#            - "443:443"
+#            - "80:80"
+#        build: apache2
+#        volumes:
+#            - ./apache2/entrypoint.sh:/entrypoint.sh
+#            - ./apache2/data/html/:/var/www/html/
+#            - ./apache2/data/logs/apache2/:/var/log/apache2/
+#            - ./apache2/data/logs/fail2ban/fail2ban.log:/var/log/fail2ban.log
+#            - ./apache2/data/config/proxy/<website>.conf:/etc/apache2/sites-available/<website>.conf
+#            - ./apache2/data/config/fail2ban/apache2.local:/etc/fail2ban/jail.d/apache2.local
+#            - ./apache2/data/config/fail2ban/action.d/docker-ban.conf:/etc/fail2ban/action.d/docker-ban.conf
+#            - ssl.cert:/etc/letsencrypt
+#        network_mode: "bridge"
 
 ############################################################################
 # Service: Proftpd
@@ -202,33 +202,33 @@ services:
 #  IP-Kamera
 #  Kalender (Abfall)
 
-    proftpd:
-        container_name: proftpd
-        restart: always
-        expose:
-            - "20"
-            - "21"
-            - "139"
-            - "445"
-        ports:
-            - "20:20"
-            - "21:21"
-            - "60000-60100:60000-60100"
-            - "139:139"
-            - "445:445"
-        build: proftpd
-        volumes:
-            - ./proftpd/entrypoint.sh:/entrypoint.sh
-            - ./proftpd/data/logs/proftpd/:/var/log/proftpd/
-            - ./proftpd/data/config/ftp/proftp-custom.conf:/etc/proftpd/conf.d/proftp-custom.conf
-            - ./proftpd/data/config/ftp/tls-custom.conf:/etc/proftpd/conf.d/tls-custom.conf
-            - ./proftpd/data/logs/smb/:/var/log/samba/
-            - ./proftpd/data/config/smb/smb-custom.conf:/etc/samba/smb.conf
-            - ssl.cert:/etc/letsencrypt
-            - tvh.recordings:/var/www/ftp/recordings/
-            - ftp.camera:/var/www/ftp/camera/
-            - ftp.fhem:/var/www/ftp/fhem/
-        network_mode: "bridge"
+#    proftpd:
+#        container_name: proftpd
+#        restart: always
+#        expose:
+#            - "20"
+#            - "21"
+#            - "139"
+#            - "445"
+#        ports:
+#            - "20:20"
+#            - "21:21"
+#            - "60000-60100:60000-60100"
+#            - "139:139"
+#            - "445:445"
+#        build: proftpd
+#        volumes:
+#            - ./proftpd/entrypoint.sh:/entrypoint.sh
+#            - ./proftpd/data/logs/proftpd/:/var/log/proftpd/
+#            - ./proftpd/data/config/ftp/proftp-custom.conf:/etc/proftpd/conf.d/proftp-custom.conf
+#            - ./proftpd/data/config/ftp/tls-custom.conf:/etc/proftpd/conf.d/tls-custom.conf
+#            - ./proftpd/data/logs/smb/:/var/log/samba/
+#            - ./proftpd/data/config/smb/smb-custom.conf:/etc/samba/smb.conf
+#            - ssl.cert:/etc/letsencrypt
+#            - tvh.recordings:/var/www/ftp/recordings/
+#            - ftp.camera:/var/www/ftp/camera/
+#            - ftp.fhem:/var/www/ftp/fhem/
+#        network_mode: "bridge"
 
 ############################################################################
 # Service: Portainer
@@ -236,17 +236,17 @@ services:
 
 # docker-compose WebUI testen
 
-    portainer:
-        container_name: portainer
-        restart: always
-        expose:
-            - "9000"
-        ports:
-            - "9000:9000"
-        image: portainer/portainer
-        volumes:
-            - /var/run/docker.sock:/var/run/docker.sock
-        network_mode: "bridge"
+#    portainer:
+#        container_name: portainer
+#        restart: always
+#        expose:
+#            - "9000"
+#        ports:
+#            - "9000:9000"
+#        image: portainer/portainer
+#        volumes:
+#            - /var/run/docker.sock:/var/run/docker.sock
+#        network_mode: "bridge"
 
 ############################################################################
 # Service: MySQL
@@ -269,7 +269,7 @@ services:
         volumes:
             - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
             - ./mysql/fhem-init.sql:/docker-entrypoint-initdb.d/fhem-init.sql
-            - ./mysql/kodi-init.sql:/docker-entrypoint-initdb.d/kodi-init.sql
+#            - ./mysql/kodi-init.sql:/docker-entrypoint-initdb.d/kodi-init.sql
             - ./mysql/data:/var/lib/mysql
         environment:
             - MYSQL_ROOT_PASSWORD=pwd
@@ -279,23 +279,23 @@ services:
 # Service: phpMyAdmin
 ############################################################################
 
-    phpmyadmin:
-        container_name: phpmyadmin
-        restart: always
-        expose:
-            - "80"
-        ports:
-            - "8080:80"
-        image: phpmyadmin/phpmyadmin
-        environment:
-            - PMA_HOST=mysql
-            - PMA_USER=root
-            - PMA_PASSWORD=pwd
-        links:
-            - "mysql:mysql"
-        network_mode: "bridge"
-        depends_on:
-            - "mysql"
+#    phpmyadmin:
+#        container_name: phpmyadmin
+#        restart: always
+#        expose:
+#            - "80"
+#        ports:
+#            - "8080:80"
+#        image: phpmyadmin/phpmyadmin
+#        environment:
+#            - PMA_HOST=mysql
+#            - PMA_USER=root
+#            - PMA_PASSWORD=pwd
+#        links:
+#            - "mysql:mysql"
+#        network_mode: "bridge"
+#        depends_on:
+#            - "mysql"
 
 ############################################################################
 # Service: MQTT
@@ -321,15 +321,15 @@ services:
 # Multicast     Sonos benutzt 239.255.255.250/1900
 # Je nachdem wie Du das Netz segmentiert hast, kannst Du IGMP oder einen Multicast/Bonjour-Proxy einsetzen
 
-#    sonos:
-#        container_name: fhem_sonos
-#        restart: always
-#        build: fhem_sonos
-#        volumes:
-#            - ./fhem_sonos/entrypoint.sh:/entrypoint.sh
-#        links:
-#        hostname: fhem_sonos
-#        network_mode: "host"
+    sonos:
+        container_name: fhem_sonos
+        restart: always
+        build: fhem_sonos
+        volumes:
+            - ./fhem_sonos/entrypoint.sh:/entrypoint.sh
+        links:
+        hostname: fhem_sonos
+        network_mode: "host"
 #        networks:
 #            net_host:
 #                ipv4_address: 192.168.X.X
@@ -338,22 +338,22 @@ services:
 # Service: FHEM Alexa
 ############################################################################
 
-    alexa:
-        container_name: fhem_alexa
-        restart: always
-        expose:
-            - "3000"
-        ports:
-            - "3000:3000"
-        build: fhem_alexa
-        volumes:
-            - ./fhem_alexa/entrypoint.sh:/entrypoint.sh
-            - ./fhem_alexa/data/config/config.json:/config/config.json
-            - ssl.cert:/etc/letsencrypt
-        network_mode: "bridge"
-        depends_on:
-            - "apache2"
-            - "fhem"
+#    alexa:
+#        container_name: fhem_alexa
+#        restart: always
+#        expose:
+#            - "3000"
+#        ports:
+#            - "3000:3000"
+#        build: fhem_alexa
+#        volumes:
+#            - ./fhem_alexa/entrypoint.sh:/entrypoint.sh
+#            - ./fhem_alexa/data/config/config.json:/config/config.json
+#            - ssl.cert:/etc/letsencrypt
+#        network_mode: "bridge"
+#        depends_on:
+#            - "apache2"
+#            - "fhem"
 
 ############################################################################
 # Service: FHEM
@@ -374,29 +374,26 @@ services:
             - "7072:7072"
         build: fhem
         devices:
-            - /dev/lirc0:/dev/lirc0
-            - /dev/serial/by-id/usb-FTDI_FT232R_USB_UART_GPIOPINS-if00-port0:/dev/ttyUSB0
-            - /dev/serial/by-id/usb-FTDI_FT232R_USB_UART_A9M9DV3R-if00-port0:/dev/ttyUSB1
-            - /dev/serial/by-id/usb-FTDI_FT232R_USB_UART_CUL433MH-if00-port0:/dev/ttyUSB2
-#            - /dev/serial/by-id/usb-FTDI_FT232R_USB_UART_CUL868MH-if00-port0:/dev/ttyUSB3
-#            - /dev/serial/by-id/usb-FTDI_FT232R_USB_UART_CUL?????-if00-port0:/dev/ttyUSB4
+#            - /dev/lirc0:/dev/lirc0
+#            - /dev/serial/by-id/usb-busware.de_CUL868-if00:/dev/ttyUSB0
+#            - /dev/serial/by-id/usb-1a86_USB2.0-Serial-if00-port0:/dev/ttyUSB1
         volumes:
             - ./fhem/entrypoint.sh:/entrypoint.sh
             - ./fhem/log/:/opt/fhem/log/
             - ./fhem/backup/:/opt/fhem/backup/
             - ./fhem/data/fhem.cfg:/opt/fhem/fhem.cfg
-            - ./fhem/data/kal_abfall.ics:/opt/fhem/kal_abfall.ics
+#            - ./fhem/data/kal_abfall.ics:/opt/fhem/kal_abfall.ics
             - ./fhem/data/FHEM/controls.txt:/opt/fhem/FHEM/controls.txt
             - ./fhem/data/FHEM/99_myUtils.pm:/opt/fhem/FHEM/99_myUtils.pm
-            - ./fhem/data/FHEM/hol_nrw.holiday:/opt/fhem/FHEM/hol_nrw.holiday
+#            - ./fhem/data/FHEM/hol_nrw.holiday:/opt/fhem/FHEM/hol_nrw.holiday
             - ./fhem/data/contrib/dblog/db.conf:/opt/fhem/contrib/dblog/db.conf
             - ./fhem/data/www/gplot/:/opt/fhem/data/www/gplot/
             - ./fhem/data/www/images/default/:/opt/fhem/data/www/images/default/
-            - ./fhem/data/lirc/lircd.conf:/etc/lirc/lircd.conf
-            - ./fhem/data/lirc/hardware.conf:/etc/lirc/hardware.conf
-            - ./fhem/data/lirc/lircrc:/opt/fhem/lircrc
-            - ftp.camera:/var/www/ftp/camera/
-            - ftp.fhem:/var/www/ftp/fhem/
+#            - ./fhem/data/lirc/lircd.conf:/etc/lirc/lircd.conf
+#            - ./fhem/data/lirc/hardware.conf:/etc/lirc/hardware.conf
+#            - ./fhem/data/lirc/lircrc:/opt/fhem/lircrc
+#            - ftp.camera:/var/www/ftp/camera/
+#            - ftp.fhem:/var/www/ftp/fhem/
 #        links:
 #            - "mysql:mysql"
 #            - "alexa:alexa"
@@ -405,31 +402,31 @@ services:
 #            - fhem_bridge
         depends_on:
             - "mysql"
-            - "proftpd"
+#            - "proftpd"
 #            - "sonos"
 
 ############################################################################
 # Service: TVheadend mit OSCAM
 ############################################################################
 
-    tvheadend:
-        container_name: tvheadend
-        restart: always
-        expose:
-            - "9981"
-            - "9982"
-            - "8888"
-        ports:
-            - "9981:9981"
-            - "9982:9982"
-            - "8888:8888"
-        build: tvheadend
-        privileged: true
+#    tvheadend:
+#        container_name: tvheadend
+#        restart: always
+#        expose:
+#            - "9981"
+#            - "9982"
+#            - "8888"
+#        ports:
+#            - "9981:9981"
+#            - "9982:9982"
+#            - "8888:8888"
+#        build: tvheadend
+#        privileged: true
 #        devices:
 #            - /dev/serial/by-id/usb-Argolis_BV_Smartreader2_plus_HDPLUS-if00-port0:/dev/ttyUSB0
-        volumes:
-            - ./tvheadend/entrypoint.sh:/entrypoint.sh
+#        volumes:
+#            - ./tvheadend/entrypoint.sh:/entrypoint.sh
             # Volumes in Container mounten
-            - tvh.config:/config
-            - tvh.recordings:/recordings
-        network_mode: "bridge"
+#            - tvh.config:/config
+#            - tvh.recordings:/recordings
+#        network_mode: "bridge"
